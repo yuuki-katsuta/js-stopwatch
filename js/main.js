@@ -32,8 +32,40 @@
     }, 10)
   }
 
+  //ボタンの状態をセットする関数
+
+  //デフォルトで適用させる
+  setButtonStateInitial()
+
+  //デフォルト
+  function setButtonStateInitial() {
+    start.classList.remove('inactive')
+    stop.classList.add('inactive')
+    reset.classList.add('inactive')
+  }
+
+  //タイマー起動中
+  function setButtonStateRunning() {
+    start.classList.add('inactive')
+    stop.classList.remove('inactive')
+    reset.classList.add('inactive')
+  }
+
+  //止めたあと
+  function setButtonStateStopped() {
+    start.classList.remove('inactive')
+    stop.classList.add('inactive')
+    reset.classList.remove('inactive')
+  }
+
   //タイマー開始
   start.addEventListener('click', () => {
+    if (start.classList.contains('inactive') === true) {
+      //inactiveクラスが含まれているかどうかを確認している
+      return
+      //returnでそれ以降の処理setButtonStateRunning()などを停止することで、ボタン連打を無効化している
+    }
+    setButtonStateRunning()
     //Date.now()で現在時刻取得
     startTime = Date.now()
     countUp()
@@ -42,6 +74,10 @@
 
   //タイマー停止
   stop.addEventListener('click', () => {
+    if (stop.classList.contains('inactive') === true) {
+      return
+    }
+    setButtonStateStopped()
     //タイマー停止にはclearTimeoutメソッドを使用
     clearTimeout(timeoutId)
 
@@ -59,6 +95,10 @@
 
   //タイマーリセット
   reset.addEventListener('click', () => {
+    if (reset.classList.contains('inactive') === true) {
+      return
+    }
+    setButtonStateInitial()
     //タイマーリセットにはtextContentを書き換える
     timer.textContent = '00:00:000'
     //リセットしたら経過時間も０にする
